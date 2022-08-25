@@ -1,0 +1,150 @@
+package LAB3_A;
+import java.util.*;
+import java.sql.*;
+public class student {
+	Connection con=null;
+	Scanner sc=new Scanner(System.in);
+	public Connection getconnect() {
+		String user="root";
+		String url="jdbc:mysql://localhost:3306/students";
+		String password="1234";
+		try {
+			//load driver
+			Class.forName("com.mysql.jdbc.Driver");
+			//create connection
+			con=DriverManager.getConnection(url,user,password);
+			System.out.println("connection establish");
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		return con;
+	}
+	public void insert() {
+		try {
+		con=getconnect();
+		
+		System.out.println("Enter the student usn :");
+		String usn=sc.next();
+		System.out.println("Enter the student name : ");
+		String name=sc.next();
+		System.out.println("Enter the student address");
+		String address=sc.next();
+		Statement st=con.createStatement();
+		String query="insert into student values('"+usn+"','"+name+"','"+address+"')";
+		st.executeUpdate(query);
+		con.close();
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	public void update() {
+		try {
+			con=getconnect();
+			Statement st=con.createStatement();
+			String query=null;
+			System.out.println("Enter the usn");
+			String usn=sc.next();
+		
+			System.out.println("---MENU---");
+			System.out.println("1.NAME UPDATE");
+			System.out.println("2.ADDRESS UPDATE");
+			int ch=sc.nextInt();
+			if(ch==1) {
+				System.out.println("enter the name");
+				String name=sc.next();
+				query="update student set NAME='"+name+"' where USN='"+usn+"'";
+				st.executeUpdate(query);
+			}
+			else if(ch==2) {
+				System.out.println("enter the address");
+				String address=sc.next();
+				query="update student set ADDRESS='"+address+"' where USN='"+usn+"'";
+				st.executeUpdate(query);
+			}
+			else {
+				System.out.println("invalid option");
+			}
+			con.close();
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
+	}
+	public void delete() {
+		try {
+		con=getconnect();
+		Statement st=con.createStatement();
+		System.out.println("Enter the usn to delete that record");
+		String usn=sc.next();
+		String query="delete from student where USN='"+usn+"' ";
+		System.out.println("Deleted Sucesfully");
+		st.executeUpdate(query);
+		con.close();
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+	public void display() {
+		try {
+			con=getconnect();
+			Statement st=con.createStatement();
+			String query="select * from student";
+			ResultSet rs=st.executeQuery(query);
+			System.out.println("USN"+"\t"+"NAME"+"\t"+"Address");
+			while(rs.next()) {
+				
+				System.out.println(rs.getString(1)+"\t"+rs.getString(2)+"\t"+rs.getString(3));
+			}
+			con.close();
+		}
+		catch(Exception e) 
+		{
+			System.out.println(e);
+		}
+	}
+	public static void main(String args[]) {
+		Scanner sc = new Scanner(System.in);
+		student s1 = new student();
+		while(true)
+		{
+			System.out.println("-----MENU------");
+			System.out.println("1. Insert");
+			System.out.println("2. Update");
+			System.out.println("3. Delete");
+			System.out.println("4. Display");
+			System.out.println("5. EXit");
+			System.out.println("Enter the Choice : ");
+			int ch = sc.nextInt();
+			
+			if(ch==1)
+			{
+				s1.insert();
+			}
+			else if(ch==2)
+			{
+				s1.update();
+			}
+			else if(ch==3)
+			{
+				s1.delete();
+			}
+			else if(ch==4)
+			{
+				s1.display();
+			}
+			else if(ch==5)
+				System.exit(0);
+			else
+				System.out.println("Invalid Choice");
+		}
+		
+	}
+
+}
+
