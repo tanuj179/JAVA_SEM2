@@ -1,0 +1,196 @@
+package LAB3_b;
+import java.util.*;
+import java.sql.*;
+
+public class Student {
+	Connection con;
+	public Connection getconnect() {
+		try {
+			String url="jdbc:mysql://172.16.34.105:3306/1rv21mc037";
+			String user="1rv21mc037";
+			String password="1rv21mc037";
+			//load driver
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			//connection
+			con=DriverManager.getConnection(url,user,password);
+			System.out.println("connection establish");
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		return con;
+	}
+	public void insert() {
+		try {
+			con=getconnect();
+			Scanner sc=new Scanner(System.in);
+			Statement st=con.createStatement();
+			System.out.println("Enter the student usn :");
+			String usn=sc.next();
+			if(usn.length()>=2) {
+				throw new MyException("USN LENGTH EXCEED");
+			}
+			System.out.println("Enter the student name : ");
+			String name=sc.next();
+			try {
+			if(name.length()>=10) {
+				throw new MyException("Name LIMIT Exceed");
+			}}
+			catch(MyException e) {
+				System.out.println(e);
+			}
+			System.out.println("Enter the student address");
+			String address=sc.next();
+			String query="insert into Student values(?,?,?)";
+			PreparedStatement ps=con.prepareStatement(query);
+			ps.setString(1,usn);
+			ps.setString(2,name);
+			ps.setString(3,address);
+			int Status=ps.executeUpdate();
+			System.out.println(Status +" "+"Inserted Sucefully");
+		}
+		catch(SQLException e) {
+			System.out.println(e);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void update() {
+		try {
+			Scanner sc=new Scanner(System.in);
+			con=getconnect();
+			Statement st=con.createStatement();
+			String query=null;
+			System.out.println("Enter the usn");
+			String usn=sc.next();
+			System.out.println("---MENU---");
+			System.out.println("1.NAME UPDATE");
+			System.out.println("2.ADDRESS UPDATE");
+			int ch=sc.nextInt();
+			if(ch==1) {
+				System.out.println("enter the name");
+				String name=sc.next();
+				try {
+					if(name.length()>=10) {
+						throw new MyException("Name LIMIT Exceed");
+					}}
+					catch(MyException e) {
+						System.out.println(e);
+					}
+				query="update Student set NAME=? where USN=?";
+				PreparedStatement ps=con.prepareStatement(query);
+				ps.setString(2,usn);
+				ps.setString(1,name);
+				int Status=ps.executeUpdate();
+				System.out.println(Status +" "+"Updated Sucefully");
+				
+				
+			}
+			else if(ch==2) {
+				System.out.println("enter the address");
+				String address=sc.next();
+				query="update Student set ADDRESS=? where USN=?";
+				PreparedStatement ps=con.prepareStatement(query);
+				ps.setString(2,usn);
+				ps.setString(1,address);
+				int Status=ps.executeUpdate();
+				System.out.println(Status +" "+"Updated Sucefully");
+			}
+			else {
+				System.out.println("invalid option");
+			}
+			con.close();
+		}
+		catch(SQLException e) {
+			System.out.println(e);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void Display() {
+		try {
+			con=getconnect();
+			Statement st=con.createStatement();
+			String query="select * from Student";
+			PreparedStatement ps=con.prepareStatement(query);
+			ResultSet rs=st.executeQuery(query);
+			System.out.println("USN"+"\t"+"NAME"+"\t"+"Address");
+			while(rs.next()) {
+
+				System.out.println(rs.getString(1)+"\t"+rs.getString(2)+"\t"+rs.getString(3));
+			}
+			con.close();
+		}
+		catch(SQLException e) {
+			System.out.println(e);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void Delete() {
+		try {
+			Scanner sc=new Scanner(System.in);
+			con=getconnect();
+			Statement st=con.createStatement();
+			System.out.println("Enter the usn to delete that record");
+			String usn=sc.next();
+			String query="delete from Student where USN=?";
+			PreparedStatement ps=con.prepareStatement(query);
+			ps.setString(1,usn);
+			int status=ps.executeUpdate();
+			System.out.println(status+" "+"Deleted sucesfully");
+			
+			st.executeUpdate(query);
+			con.close();
+		}
+		
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Because the Table name is not Correct");
+		}
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc=new Scanner (System.in);
+		Student std=new Student();
+		System.out.println("Student Database");
+		System.out.println("-----------------");
+		
+		while(true) {
+			System.out.println("1.Insert");
+			System.out.println("2.Update");
+			System.out.println("3.Display");
+			System.out.println("4.Delete");
+			System.out.println("5.Exit");
+			int ch=sc.nextInt();
+			if(ch==1) {
+				//Insert
+				std.insert();
+			}
+			else if(ch==2) {
+				//Update
+				std.update();
+			}
+			else if(ch==3) {
+				//Display
+				std.Display();
+			}
+			else if(ch==4) {
+				//Delete
+				std.Delete();
+			}
+			else if(ch==5) {
+				//Exit
+				break;
+			}
+			else {
+				System.out.println("Invalid option");
+			}
+		}
+	}
+
+}
