@@ -1,0 +1,53 @@
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/Lab_4a")
+public class Lab_4a extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    public Lab_4a() {
+        super();
+    }
+	
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException  {
+
+	try {response.setIntHeader("Refresh", 1);
+		
+		SimpleDateFormat dateFormat=new SimpleDateFormat("YYYY/MM/dd HH:mm:ss");
+		Date date = new Date();
+		PrintWriter out = response.getWriter();
+		String title=("Auto page Refresh using Servlet");
+		out.println(title+"Current time is : "+dateFormat.format(date));
+		}
+	catch(IOException e) {
+		System.out.println(e);
+		}
+	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+
+		try{response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+		catch(IOException e) {
+			System.out.println(e);
+		}
+		
+}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
+
+	try {	
+		doGet(request, response);
+		}
+	catch(ServletException e) {
+		System.out.println(e);
+		}
+	}
+}
