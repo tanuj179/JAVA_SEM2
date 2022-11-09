@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="exp.jsp">
+	First name: <input type="text" name="fname" placeholder="Enter first name"><br>
+	Last name: <input type="text" name="lname" placeholder="Enter Last name"><br>
+	Age: <input type="text" name="age" placeholder="Enter age"><br>
+	<input type="submit">
+	</form>
+</body>
+</html>
