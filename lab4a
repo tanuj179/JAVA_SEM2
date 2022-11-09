@@ -1,0 +1,34 @@
+package lab4a;
+import java.io.*;
+import java.util.*;
+import javax.servlet.*;
+import javax.servlet.annotation.*;
+import javax.servlet.http.*;
+
+@WebServlet("/lol")
+public class lab4a extends HttpServlet {
+private static final long serialVersionUID = 1L;
+       
+   
+public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+// TODO Auto-generated method stub
+response.setIntHeader("Refresh",1);
+response.setContentType("text/html");
+String ct,am_pm;
+int hour,minute,second;
+Calendar cl=new GregorianCalendar();
+
+hour=cl.get(Calendar.HOUR);
+minute=cl.get(Calendar.MINUTE);
+second=cl.get(Calendar.SECOND);
+if(cl.get(Calendar.AM_PM)==0) {
+am_pm="AM";
+}
+else {
+am_pm="PM";
+}
+ct=hour+":"+minute+":"+second+" "+am_pm;
+PrintWriter out=response.getWriter();
+out.println("<html><body align = \"center\" bgColor = \"cream\"><h1>AUTO REFRESH PAGE</h1><br>"+"Current Time is: "+ct);
+}
+}
